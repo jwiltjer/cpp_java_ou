@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Klasse representeerd een Uitgiftebalie
+ * Klasse representeert een Uitgiftebalie
  * 
  * @author jwiltjer
  *
@@ -23,7 +23,7 @@ public class Uitgiftebalie {
 	/**
 	 * pakt de Maaltijd uit de ArrayList die het langst in de lijst staat
 	 * 
-	 * @return langst wachtende Maaltijd
+	 * @return langst wachtende Maaltijd op de uitgifte balie
 	 */
 	public synchronized Maaltijd pakMaaltijd() {
 		Maaltijd maaltijd = null;
@@ -37,10 +37,14 @@ public class Uitgiftebalie {
 	/**
 	 * plaatst een maaltijd achteraan in de ArrayList van Maaltijden
 	 * 
-	 * @param maaltijd
+	 * @param maaltijd die op de uitgiftebalie geplaatst wordt
 	 */
 	public synchronized void plaatsMaaltijd(Maaltijd maaltijd) {
 		bestellingen.add(maaltijd);
+	}
+	
+	public List<Maaltijd> getList (){
+		return bestellingen;
 	}
 
 }

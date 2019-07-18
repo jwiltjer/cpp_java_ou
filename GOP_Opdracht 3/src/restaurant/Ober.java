@@ -17,8 +17,8 @@ public class Ober implements Runnable {
 	/**
 	 * constructor: Instantieert een Ober
 	 * 
-	 * @param naam  naam van de Ober
-	 * @param balie balie in het Restaurant
+	 * @param naam van de Ober
+	 * @param balie in het Restaurant
 	 */
 	public Ober(String naam, Uitgiftebalie balie) {
 		this.naam = naam;

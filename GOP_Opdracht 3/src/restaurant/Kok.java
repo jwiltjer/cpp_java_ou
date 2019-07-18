@@ -18,8 +18,8 @@ public class Kok implements Runnable {
 	/**
 	 * Constructor: Instantieert een kok
 	 * 
-	 * @param naam naam van de kok
-	 * @param balie balie in het Restaurant
+	 * @param naam van de kok
+	 * @param uitgiftebalie in het Restaurant
 	 */
 	public Kok(String naam, Uitgiftebalie balie) {
 		this.naam = naam;

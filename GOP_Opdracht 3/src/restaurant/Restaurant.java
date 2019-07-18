@@ -17,10 +17,14 @@ public class Restaurant {
 	 */
 	public Restaurant() {
 		this.balie = new Uitgiftebalie();
+		
 	}
 
 	/**
-	 * Main methode
+	 * Main methode: start het restaurant en zorgt dat de koks en obers beginnen met
+	 * werken in verschillende threads en stoppen nadat de simulatietijd verstreken
+	 * is.
+	 * 
 	 * @param args niet gebruikt
 	 */
 	public static void main(String[] args) {
@@ -45,17 +49,22 @@ public class Restaurant {
 		while (System.currentTimeMillis() < einde) {
 			try {
 				Thread.sleep(SIMULATIETIJD);
+				
 			} catch (InterruptedException e) {
 
 				e.printStackTrace();
 			}
 		}
+		
+		
 		kok1.stopKoken();
 		kok2.stopKoken();
 		kok3.stopKoken();
 
 		ober1.stopServeren();
 		ober2.stopServeren();
+		int maaltijdenOver = ou.balie.getList().size();
+		System.out.println(maaltijdenOver);
 	}
 
 }

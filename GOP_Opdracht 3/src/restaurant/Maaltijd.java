@@ -20,13 +20,15 @@ public class Maaltijd {
 	}
 /**
  * String representatie van het Maaltijd object
+ * @return string representatie
  */
 	@Override
 	public String toString() {
 		return naam + " voor tafelnummer " + tafelnummer;
 	}
 /**
- * getter tafelnummer
+ * geef aan naar welk tafelnummer de maaltijd moet worden bezorgd
+ * @return tafelnummer van de maaltijd
  */
 	public int getTafelnummer() {
 		return tafelnummer;
