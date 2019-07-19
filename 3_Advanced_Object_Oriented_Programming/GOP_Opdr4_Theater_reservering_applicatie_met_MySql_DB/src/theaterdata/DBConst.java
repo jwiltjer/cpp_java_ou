@@ -8,5 +8,5 @@ public class DBConst {
   protected static final String DRIVERNAAM = "com.mysql.cj.jdbc.Driver";
   protected static final String URL = "jdbc:mysql://localhost/theater";
   protected static final String GEBRUIKERSNAAM = "root";
-  protected static final String WACHTWOORD = "Johannes05"; 
+  protected static final String WACHTWOORD = "theater"; 
 }
