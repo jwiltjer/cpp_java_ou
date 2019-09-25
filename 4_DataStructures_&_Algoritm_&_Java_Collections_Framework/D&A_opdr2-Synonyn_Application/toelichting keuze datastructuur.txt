@@ -1,0 +1,14 @@
+Opdracht 2-a: toelichting op keuze data structuur
+
+Voor het opslaan van de gegevens in de klasse Synoniemenbeheer heb ik gekozen voor de interface SortedSet uit het Java Collections Framework. 
+Ik gebruik daar de enige implementatie van: TreeMap. De keuze hiervoor is logisch omdat het natuurlijk gesorteerd is(vraag uit opdracht bij woordList) 
+en ook de mogelijkheid biedt om een eigen comparator te gebruiken (bij synoniemen sorteren). Verder is een belangrijk argument dat het werkt
+op basis van keys met daarachter values. Wat goed overeenkomt bij het opslaan van het woord(keys) en de synoniemen(values). Omdat de sleutelwaarden zichtbaar dienen
+te zijn in de applicatie heb ik ervoor gekozen om SynoniemenBeheer een subklasse van AbstractListModel te maken, waardoor het makkelijk is de inhoud
+te tonen in de JList componenten woordList en SynoniemenList en deze snel bij te werken doormiddel van aanroep naar methodes uit de AbstrictListModel(fireContentsChanged).
+
+
+
+
+
+ 
