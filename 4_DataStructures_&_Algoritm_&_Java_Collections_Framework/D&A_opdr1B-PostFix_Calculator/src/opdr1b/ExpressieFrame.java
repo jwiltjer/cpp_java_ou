@@ -9,6 +9,7 @@ import java.io.StringReader;
 import java.util.EmptyStackException;
 import java.util.Stack;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -32,8 +33,6 @@ public class ExpressieFrame extends JFrame {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				ExpressieFrame thisClass = new ExpressieFrame();
@@ -97,81 +96,114 @@ public class ExpressieFrame extends JFrame {
 		return jContentPane;
 	}
 
-	private void berekenKnopAction() {
+	private void berekenKnopAction() throws PostfixException {
+		String expressie = expressieVeld.getText();
 
-		// String expressie = expressieVeld.getText();
+		if (expressie.length() < 2) {
+			foutLabel.setText("expressie moet uit minimaal 2 cijfers bestaan");
+		} else if (!Pattern.matches("\\d\\s[*-+/]", expressie)) 
+			foutLabel.setText("FOUT!");
+		else {
+			/*
 
-		// check op geldige invoer('-', '/', '+', '-', & 0-9)
-		// if (!expressie.matches("[0-9\\(\\)\\+\\-\\*\\./\\\"]")) {
-		// foutLabel.setText("Alleen *, /, +, -, 0-9 zijn geldige karakters");
-		// } else {
+			for (int i = 0; i < expressie.length(); i++) {
+				char c = expressie.charAt(i);
+				if (!Character.isDigit(c) || !(c == ' ' || c == '+' || c == '-' || c == '/' || c == '*')) {
+					foutLabel.setText("vul een cijfer of operator in");
+				}
 
-		if (stack.isEmpty()) {
+			}
 
-			foutLabel.setText("Vul minmaal 2 getallen in voor een operator");
-		}
-		StreamTokenizer tkn = new StreamTokenizer(new StringReader(expressieVeld.getText()));
-		boolean eind = false;
+			// wat is de goede regex voor '-', '/', '+', '-', & 0-9
 
-		// zorg ervoor dat '/' en '-' worden gelezen als operatoren
-		tkn.ordinaryChar('/');
-		tkn.ordinaryChar('-');
+			// als stack size == 2 moet het volgende char een operator zijn
 
-		while (!eind) {
-			int token = -4;
+			// de stack moet eerst size 2 hebbeb voor voordat er een operator mag komen
+
+			/*
+			 * for(int i = 0; i < expressie.length();i++) { char c = expressie.charAt(i);
+			 * if(!Character.isDigit(c)|!(c== ' '|| c == '+'| c =='-' |c =='/'|c =='*')) {
+			 * foutLabel.setText("vul een cijfer of operator in"); }
+			 */
+			/*
+			 * if (Pattern.matches("[a-zA-Z]+", expressie)) {
+			 * foutLabel.setText("expressie mag geen letters bevatten"); }
+			 */
+			// check op geldige invoer('-', '/', '+', '-', & 0-9)
+			/*
+			 * 
+			 * foutLabel.setText("Alleen *, /, +, -, 0-9 zijn geldige karakters");
+			 */
+			if (stack.isEmpty())
+
+			{
+
+				foutLabel.setText("Vul minmaal 2 getallen in voor een operator");
+			}
+			StreamTokenizer tkn = new StreamTokenizer(new StringReader(expressieVeld.getText()));
+			boolean eind = false;
+
+			// zorg ervoor dat '/' en '-' worden gelezen als operatoren
+			tkn.ordinaryChar('/');
+			tkn.ordinaryChar('-');
+
+			while (!eind) {
+				int token = -4;
+				try {
+					token = tkn.nextToken();
+				} catch (IOException e) {
+					foutLabel.setText("foutieve invoer, probeer opnieuw");
+					e.printStackTrace();
+				}
+				switch (token) {
+				case StreamTokenizer.TT_NUMBER:
+					int getal = (int) Math.round(tkn.nval);
+					stack.push("" + getal);
+					break;
+
+				case StreamTokenizer.TT_EOF:
+					eind = true;
+					break;
+
+				default: // bij een operator * / + of -
+
+					int y = 0;
+					int x = 0;
+					try {
+						y = Integer.parseInt(stack.pop());
+						x = Integer.parseInt(stack.pop());
+					} catch (NumberFormatException e) {
+						foutLabel.setText("Berekening mislukt, probeer opnieuw");
+						e.printStackTrace();
+					} catch (PostfixException e) {
+						foutLabel.setText("Vul eerst 2 getallen in dan pas een operator");
+						e.printStackTrace();
+					}
+
+					// hier wordt de waarde van de token aan een String toegekend.
+
+					String waardeToken = Character.toString((char) tkn.ttype);
+
+					// bereken met de laatste 2 getallen van de stack de uitkomst met de operator
+					try {
+
+						stack.push(rekenUit(waardeToken, x, y));
+					} catch (PostfixException e) {
+						foutLabel.setText("fout bij het maken van de berekening, probeer opnieuw");
+						e.printStackTrace();
+					}
+					break;
+				}
+			}
 			try {
-				token = tkn.nextToken();
-			} catch (IOException e) {
-				foutLabel.setText("foutieve invoer, probeer opnieuw");
+				waardeVeld.setText(stack.pop());
+			} catch (PostfixException e) {
+				foutLabel.setText("geen uitkomst mogelijk, probeer opnieuw");
 				e.printStackTrace();
 			}
-			switch (token) {
-			case StreamTokenizer.TT_NUMBER:
-				int getal = (int) Math.round(tkn.nval);
-				stack.push("" + getal);
-				break;
-
-			case StreamTokenizer.TT_EOF:
-				eind = true;
-				break;
-
-			default: // bij een operator * / + of -
-
-				int y = 0;
-				int x = 0;
-				try {
-					y = Integer.parseInt(stack.pop());
-					x = Integer.parseInt(stack.pop());
-				} catch (NumberFormatException e) {
-					foutLabel.setText("Berekening mislukt, probeer opnieuw");
-					e.printStackTrace();
-				} catch (PostfixException e) {
-					foutLabel.setText("Vul eerst 2 getallen in dan pas een operator");
-					e.printStackTrace();
-				}
-
-				// hier wordt de waarde van de token aan een String toegekend.
-				
-				String waardeToken = Character.toString((char) tkn.ttype);
-				
-				// bereken met de laatste 2 getallen van de stack de uitkomst met de operator
-				try {
-
-					stack.push(rekenUit(waardeToken, x, y));
-				} catch (PostfixException e) {
-					foutLabel.setText("fout bij het maken van de berekening, probeer opnieuw");
-					e.printStackTrace();
-				}
-				break;
-			}
+			foutLabel.setText("");
 		}
-		try {
-			waardeVeld.setText(stack.pop());
-		} catch (PostfixException e) {
-			foutLabel.setText("geen uitkomst mogelijk, probeer opnieuw");
-			e.printStackTrace();
-		}
-		foutLabel.setText("");
+
 	}
 
 	private String rekenUit(String operation, int x, int y) throws PostfixException {
@@ -232,7 +264,12 @@ public class ExpressieFrame extends JFrame {
 			berekenKnop.setText("Bereken waarde");
 			berekenKnop.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					berekenKnopAction();
+					try {
+						berekenKnopAction();
+					} catch (PostfixException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 		}
