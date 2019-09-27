@@ -1,24 +1,14 @@
 package opdr2;
 
-import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JList;
-import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.swing.JTextField;
-import javax.swing.event.ListDataListener;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
 public class SynoniemenFrame extends JFrame {
@@ -29,8 +19,8 @@ public class SynoniemenFrame extends JFrame {
 	private JLabel synoniemenLabel = null;
 	private JScrollPane woordScrollPane = null;
 	private JScrollPane synomiemenScrollPane = null;
-	private JList woordList = null;
-	private JList synoniemenList = null;
+	private JList<String> woordList = null;
+	private JList<String> synoniemenList = null;
 	private JTextField woordVeld = null;
 	private JTextField synoniemenVeld = null;
 	private JButton voegtoeKnop = null;
@@ -48,7 +38,6 @@ public class SynoniemenFrame extends JFrame {
 
 	private void mijnInit() {
 		synoniem = new SynoniemenBeheer();
-	
 	}
 
 	/**
@@ -64,8 +53,9 @@ public class SynoniemenFrame extends JFrame {
 	}
 
 	/**
-	 * Onvolledieg event handler voor toevoegen. Er wordt gecontroleerd of een woord
-	 * uit letters bestaat, en een woordenlijst uit woorden gescheiden door spaties.
+	 * Event handler die gecontroleerd of een woord uit letters bestaat, en een
+	 * woordenlijst uit woorden gescheiden door spaties, al bestaan in de lijst en
+	 * vervolgens het woord in de lijst toevoegt.
 	 */
 	private void voegtoeKnopAction() {
 		foutLabel.setText("");
@@ -80,40 +70,28 @@ public class SynoniemenFrame extends JFrame {
 			return;
 		} else if (synoniemenVeld.getText().length() < 1) {
 			foutLabel.setText("geen invoer");
+		} else if (synoniem.contains(woordVeld.getText())) {
+			foutLabel.setText("Synoniem bestaat al, vul een andere in");
 		} else {
-			String[] s = synoniemenVeld.getText().split("\\s+");
-
-			synoniem.getTree_map().put(woordVeld.getText(), s);
-			System.out.println(synoniem.getTree_map().keySet());
-
-			ArrayList<String> str = new ArrayList<String>();
-			for (String key : synoniem.getTree_map().keySet()) {
-				str.add(key);
-				System.out.println(key);
-			}
-			// weergave keys in woordlijst
-			woordList = (JList) woordScrollPane.getViewport().getView();
-			woordList.setListData(str.toArray());
+			synoniem.addSynoniem(woordVeld.getText(), synoniemenVeld.getText());
 		}
+		// weergave keys in woordlijst
+		woordList.setListData(synoniem.getKeys());
 
-		// velden leeg maken na operatie
+		// velden leeg maken na operatie en syno lijst leeg maken en woord deselecteren
 		woordVeld.setText("");
 		synoniemenVeld.setText("");
-
+		woordList.setSelectedIndex(-1);
+		synoniemenList.setListData(new String[0]);
 	}
 
 	/**
-	 * Lege event handler voor klikken in woordList
+	 * Event Handler die in de synoniemenList de synoniemen van het geselecteerde
+	 * woord weergeeft.
 	 * 
 	 */
 	private void woordListPressed() {
-		int sel = woordList.getSelectedIndex();
-		Object key = synoniem.getElementAt(sel);
-		String[] synoLijst = synoniem.getTree_map().get(key);
-
-		// naar gui schrijven
-		synoniemenList = (JList) synomiemenScrollPane.getViewport().getView();
-		synoniemenList.setListData(synoLijst);
+		synoniemenList.setListData(synoniem.displayValues(woordList.getSelectedIndex()));
 	}
 
 	/**
@@ -179,9 +157,9 @@ public class SynoniemenFrame extends JFrame {
 	 * 
 	 * @return javax.swing.JList
 	 */
-	private JList getWoordList() {
+	private JList<String> getWoordList() {
 		if (woordList == null) {
-			woordList = new JList();
+			woordList = new JList<String>();
 			woordList.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mousePressed(java.awt.event.MouseEvent e) {
 					woordListPressed();
@@ -196,9 +174,9 @@ public class SynoniemenFrame extends JFrame {
 	 * 
 	 * @return javax.swing.JList
 	 */
-	private JList getSynoniemenList() {
+	private JList<String> getSynoniemenList() {
 		if (synoniemenList == null) {
-			synoniemenList = new JList();
+			synoniemenList = new JList<String>();
 		}
 		return synoniemenList;
 	}

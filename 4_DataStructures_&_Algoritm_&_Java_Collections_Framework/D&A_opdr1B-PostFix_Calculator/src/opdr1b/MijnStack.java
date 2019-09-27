@@ -9,7 +9,7 @@ import java.util.Vector;
  *
  * @param <T> generieke T
  */
-public class MijnStack<T> implements Stack<T> {
+public class MijnStack<T> {
 
 	private Vector<T> myVector;
 
@@ -25,7 +25,6 @@ public class MijnStack<T> implements Stack<T> {
 	 * 
 	 * @param element: toe te voegen element
 	 */
-	@Override
 	public void push(T element) {
 		myVector.add(element);
 	}
@@ -37,7 +36,6 @@ public class MijnStack<T> implements Stack<T> {
 	 * @throws PostfixExceptie wanneer de stack leeg is
 	 * @return verwijderde element
 	 */
-	@Override
 	public T pop() throws PostfixException {
 		if (!myVector.isEmpty()) {
 			return myVector.remove(myVector.size() - 1);
@@ -52,7 +50,6 @@ public class MijnStack<T> implements Stack<T> {
 	 * 
 	 * @return stack is leeg(true) of niet (false)
 	 */
-	@Override
 	public boolean isEmpty() {
 		return myVector.isEmpty();
 	}
@@ -64,7 +61,6 @@ public class MijnStack<T> implements Stack<T> {
 	 * @throws PostfixExceptie wanneer de stack leeg is.
 	 * @return element bovenaan de stack
 	 */
-	@Override
 	public T top() throws PostfixException {
 		if (myVector.isEmpty()) {
 			throw new PostfixException("Stack is leeg");
@@ -79,7 +75,6 @@ public class MijnStack<T> implements Stack<T> {
 	 * 
 	 * @return aantal elementen op de stack
 	 */
-	@Override
 	public int size() {
 		return myVector.size();
 

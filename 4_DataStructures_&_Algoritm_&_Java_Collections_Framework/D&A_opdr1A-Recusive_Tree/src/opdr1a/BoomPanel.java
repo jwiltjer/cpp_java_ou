@@ -19,7 +19,7 @@ public class BoomPanel extends JPanel {
 
 	private double hoek; // hoek tussen de takken
 	private int diepte; // de diepte van de boom
-	private int stamLengte; // lengte van de stam
+	private double stamLengte; // lengte van de stam
 	private Pen pen; // de pen waarmee getekend wordt
 
 	/**
@@ -29,7 +29,7 @@ public class BoomPanel extends JPanel {
 	 * @param hoek,       de hoek tussen de takken
 	 * @param diepte,     de diepte van de boom.
 	 */
-	BoomPanel(int stamLengte, int hoek, int diepte) {
+	BoomPanel(double stamLengte, int hoek, int diepte) {
 		this.stamLengte = stamLengte;
 		this.hoek = hoek;
 		this.diepte = diepte;
@@ -49,31 +49,26 @@ public class BoomPanel extends JPanel {
 		pen = new Pen(g, getSize().width / 2, getSize().height - 20, 270);
 		pen.setKleur(Color.red);
 
-		// hier moet de aanroep naar tekenBoom worden ingevuld.
+		// aanroep naar tekenBoom 
 
 		tekenBoom(diepte, stamLengte);
 	}
 
 	// Hier moet de methode tekenBoom worden ingevuld.
-	public void tekenBoom(int n, int len) {
-		if (n == 1) {
-			pen.aan();
-			pen.vooruit(len);			//teken stam
-			pen.uit();
-			pen.vooruit(-len);			//loop zelfde lengte terug
-		
+	public void tekenBoom(int n, double len) {
+		if (n == 0) {
+			//bijzonder geval geen actie diepte is 0
 		} else {
-			pen.aan();					//rode takken
+			pen.aan();					
 			pen.vooruit(len);			//teken stam
 			pen.draai(hoek / 2);		// draai rechtom
-			tekenBoom(n - 1, (int) (len * FACTOR));  //teken rechter blad //pen blijft op snijpunt staan
+			tekenBoom(n - 1,  (len * FACTOR));  //1e aanroep
 			pen.draai(-hoek);			//draai linksom
 		
-			pen.setKleur(Color.BLUE);	//blauwe (recursieve) takken	
-			tekenBoom(n - 1, (int) (len * FACTOR)); //teken linker blad
-			pen.draai(hoek / 2);  		//zet hoek terug op de stam
+			tekenBoom(n - 1,  (len * FACTOR)); //2e aanroep
+			pen.draai(hoek / 2);  		//draai rechtsom
 			pen.uit();					
-			pen.vooruit(-len);			//loop zelfde lengte terug over de stam
+			pen.vooruit(-len);			//loop zelfde lengte terug
 			
 		}
 	}

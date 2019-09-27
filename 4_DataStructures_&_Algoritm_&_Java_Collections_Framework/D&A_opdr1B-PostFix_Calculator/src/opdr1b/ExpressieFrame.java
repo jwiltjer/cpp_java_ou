@@ -1,16 +1,7 @@
 package opdr1b;
 
 import javax.swing.SwingUtilities;
-import java.awt.BorderLayout;
 import java.awt.Rectangle;
-import java.io.IOException;
-import java.io.StreamTokenizer;
-import java.io.StringReader;
-import java.util.EmptyStackException;
-import java.util.Stack;
-import java.util.StringTokenizer;
-import java.util.regex.Pattern;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -94,10 +85,8 @@ public class ExpressieFrame extends JFrame {
 	 */
 	private void berekenKnopAction() {
 		foutLabel.setText("");
-		PostFixBerekening bereken = new PostFixBerekening(expressieVeld.getText());
-
 		try {
-			waardeVeld.setText(bereken.berekenPostFix());
+			waardeVeld.setText(PostFixBerekening.berekenPostFix(expressieVeld.getText()));
 		} catch (PostfixException e) {
 			expressieVeld.setText("");
 			waardeVeld.setText("");
